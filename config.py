@@ -31,12 +31,10 @@ class MCCAN_config:
     action_key_dim = 128
 
     lstm_unit_size = 1024
-    action_size_list = [
-        [14, 9, 9, 9, 9, 5],
-        [14, 9, 9, 9, 9, 5],
-        [14, 9, 9, 9, 9, 5],
-        [14, 9, 9, 9, 9, 5],
-        [14, 9, 9, 9, 9, 5]
-    ]
+    # What, How (Move X), How (Move Y), Skill (Move X), Skill (Move Y), Who (Target Unit)
+    action_size_list = [14, 9, 9, 9, 9, 5]
+
+    # extrinsic rewards, intrinsic reward
+    value_head_list = [Config.value_head, 1]
 
     init_learning_rate = 0.0002

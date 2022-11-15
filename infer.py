@@ -56,9 +56,13 @@ spatial_size, hero_size, monster_size, turret_size, minion_size, stat_size, invi
 mccan_net = MCCAN(spatial_size=spatial_size, hero_size=hero_size, monster_size=monster_size, turret_size=turret_size, minion_size=minion_size,
                   stat_size=stat_size, invisible_size=invisible_size, meta_cmd_size=size_info['meta_cmd'])
 mccan_net.build(is_train=False)
-each_hero_result_list = mccan_net.infer(placeholder, select_cmd_list)
+player_action_list, player_value_list = mccan_net.infer(player_feature_list=placeholder, select_cmd_list=select_cmd_list)
+print(player_action_list, player_value_list)
 
 init = tf.global_variables_initializer()
 with tf.Session() as sess:
     sess.run(init)
-    result_val = sess.run(each_hero_result_list, feed_dict=ph_data_dict)
+    result_val = sess.run(player_action_list, feed_dict=ph_data_dict)
+    print([rs[0].shape for rs in result_val])
+    result_val = sess.run(player_value_list, feed_dict=ph_data_dict)
+    print([rs.shape for rs in result_val])
