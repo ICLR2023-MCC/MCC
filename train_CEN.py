@@ -41,4 +41,4 @@ with tf.Session() as sess:
     for epoch in range(CEN_config.epoch):
         result = sess.run([train_op], feed_dict=ph_data_dict)
         visual_loss = sess.run(total_loss, feed_dict=ph_data_dict)
-        print('epoch %d: loss=%f', epoch, visual_loss)
+        print('epoch %d: loss=%f' % (epoch, visual_loss))

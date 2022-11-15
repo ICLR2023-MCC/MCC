@@ -212,12 +212,12 @@ class MCCAN:
                             fc_action_query = tf.matmul(stack_action_query, self.fc_target_attention_weight)
                             reshape_fc_action_query = tf.reshape(fc_action_query, shape=[-1, len(target_embed_list[player_index]), self.action_query_dim], name="reshape_fc_action_query")
                             reshape_fc_action_key = tf.reshape(fc_action_key, shape=[-1, self.action_key_dim, 1], name="reshape_fc_label_attention")
-                            print(reshape_fc_action_query, reshape_fc_action_key)
                             temp_action_result = tf.matmul(reshape_fc_action_query, reshape_fc_action_key)
                             action_logits = tf.reshape(temp_action_result, shape=[-1, int(np.prod(temp_action_result.get_shape()[1:]))], name="hero%d_fc_label_%d_result" % (player_index, action_index))
                         else:
                             action_logits = tf.add(tf.matmul(lstm_embed_list[player_index], self.fc_action_weight_list[action_index]), self.fc_action_bias_list[action_index], name="player%d_fc_action_%d_result" % (player_index, action_index))
-                        one_action_list.append(action_logits)
+                        softmax_prob = tf.nn.softmax(action_logits)
+                        one_action_list.append(softmax_prob)
                     player_action_list.append(one_action_list)
 
                 with tf.variable_scope("player%d_value" % player_index):

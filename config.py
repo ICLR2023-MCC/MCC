@@ -38,3 +38,6 @@ class MCCAN_config:
     value_head_list = [Config.value_head, 1]
 
     init_learning_rate = 0.0002
+
+    clip_param = 0.2
+    dual_clip_param = 3
