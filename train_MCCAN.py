@@ -30,7 +30,7 @@ feature_list = ['spatial', 'hero', 'monster', 'turret', 'minion', 'stat', 'invis
 spatial_size, hero_size, monster_size, turret_size, minion_size, stat_size, invisible_size = [size_info[k] for k in feature_list]
 mccan_net = MCCAN(spatial_size=spatial_size, hero_size=hero_size, monster_size=monster_size, turret_size=turret_size, minion_size=minion_size,
                   stat_size=stat_size, invisible_size=invisible_size, meta_cmd_size=size_info['meta_cmd'])
-mccan_net.build(is_train=False)
+mccan_net.build(is_train=True)
 player_action_list, player_value_list = mccan_net.infer(player_feature_list=placeholder, select_cmd_list=self_cmd_list)
 
 losses = []
