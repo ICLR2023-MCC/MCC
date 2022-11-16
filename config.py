@@ -1,11 +1,12 @@
 class Config:
     player_num = 5
     value_head = 5
-    batch_size = 10
+    batch_size = 512
     lstm_step = 16
 
 class CEN_config:
-    unit_dim = 256
+    hero_dim = 512
+    unit_dim = 128
     stat_dim = 256
     meta_cmd_dim = 256
 
@@ -14,7 +15,8 @@ class CEN_config:
     epoch = 2000000
 
 class CS_config:
-    unit_dim = 256
+    hero_dim = 512
+    unit_dim = 128
     stat_dim = 256
     invisible_dim = 256
     cmd_query_dim = 64
@@ -24,6 +26,7 @@ class CS_config:
     init_learning_rate = 0.0002
 
 class MCCAN_config:
+    hero_dim = 512
     unit_dim = 256
     stat_dim = 256
     invisible_dim = 256

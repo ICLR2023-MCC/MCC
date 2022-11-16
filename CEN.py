@@ -13,6 +13,7 @@ class CEN:
 
         self.meta_cmd_size = meta_cmd_size
 
+        self.hero_dim = CEN_config.hero_dim
         self.unit_dim = CEN_config.unit_dim
         self.stat_dim = CEN_config.stat_dim
         self.meta_cmd_dim = CEN_config.meta_cmd_dim
@@ -20,12 +21,12 @@ class CEN:
     def build(self, is_train):
         with tf.variable_scope('CEN'):
             hero_flatten_size = int(np.prod(self.hero_size))
-            self.fc1_hero_weight = _fc_weight_variable(shape=[hero_flatten_size, self.unit_dim], name="fc1_hero_weight", trainable=is_train)
-            self.fc1_hero_bias = _bias_variable(shape=[self.unit_dim], name="fc1_hero_bias", trainable=is_train)
-            self.fc2_hero_weight = _fc_weight_variable(shape=[self.unit_dim, self.unit_dim // 2], name="fc2_hero_weight", trainable=is_train)
-            self.fc2_hero_bias = _bias_variable(shape=[self.unit_dim // 2], name="fc2_hero_bias", trainable=is_train)
-            self.fc3_hero_weight = _fc_weight_variable(shape=[self.unit_dim // 2, self.unit_dim // 4], name="fc3_hero_weight", trainable=is_train)
-            self.fc3_hero_bias = _bias_variable(shape=[self.unit_dim // 4], name="fc3_hero_bias", trainable=is_train)
+            self.fc1_hero_weight = _fc_weight_variable(shape=[hero_flatten_size, self.hero_dim], name="fc1_hero_weight", trainable=is_train)
+            self.fc1_hero_bias = _bias_variable(shape=[self.hero_dim], name="fc1_hero_bias", trainable=is_train)
+            self.fc2_hero_weight = _fc_weight_variable(shape=[self.hero_dim, self.hero_dim // 2], name="fc2_hero_weight", trainable=is_train)
+            self.fc2_hero_bias = _bias_variable(shape=[self.hero_dim // 2], name="fc2_hero_bias", trainable=is_train)
+            self.fc3_hero_weight = _fc_weight_variable(shape=[self.hero_dim // 2, self.hero_dim // 4], name="fc3_hero_weight", trainable=is_train)
+            self.fc3_hero_bias = _bias_variable(shape=[self.hero_dim // 4], name="fc3_hero_bias", trainable=is_train)
 
             monster_flatten_size = int(np.prod(self.monster_size))
             self.fc1_monster_weight = _fc_weight_variable(shape=[monster_flatten_size, self.unit_dim], name="fc1_monster_weight", trainable=is_train)
@@ -57,7 +58,7 @@ class CEN:
             self.fc2_stat_weight = _fc_weight_variable(shape=[self.stat_dim, self.stat_dim // 4], name="fc2_stat_weight", trainable=is_train)
             self.fc2_stat_bias = _bias_variable(shape=[self.stat_dim // 4], name="fc2_stat_bias", trainable=is_train)
 
-            concat_dim = self.unit_dim + self.stat_dim // 4
+            concat_dim = self.hero_dim // 4 + self.unit_dim // 4 * 3 + self.stat_dim // 4
             meta_cmd_flatten_size = int(np.prod(self.meta_cmd_size))
             self.fc1_meta_cmd_weight = _fc_weight_variable(shape=[concat_dim, self.meta_cmd_dim], name="fc1_meta_cmd_weight", trainable=is_train)
             self.fc1_meta_cmd_bias = _bias_variable(shape=[self.meta_cmd_dim], name="fc1_meta_cmd_bias", trainable=is_train)
@@ -76,7 +77,7 @@ class CEN:
                                          name="fc2_hero_result")
             fc3_hero_result = tf.add(tf.matmul(fc2_hero_result, self.fc3_hero_weight), self.fc3_hero_bias,
                                      name="fc3_hero_result")
-            pool_hero_result = maxpooling([fc3_hero_result], 1, self.unit_dim // 4, name='hero_units')
+            pool_hero_result = maxpooling([fc3_hero_result], 1, self.hero_dim // 4, name='hero_units')
             unit_result_list.append(pool_hero_result)
 
             fc1_monster_result = tf.nn.relu((tf.matmul(monster, self.fc1_monster_weight) + self.fc1_monster_bias),

@@ -6,10 +6,10 @@ class FakeData:
         self.batch_size = batch_size * lstm_step
         self.player_num = player_num
         self.size_dict = {
-            'hero': [10], # Unit feature -- Heros
-            'monster': [5],  # Unit feature -- Monsters
-            'turret': [5],  # Unit feature -- Turrets
-            'minion': [5],  # Unit feature -- Minions
+            'hero': [100], # Unit feature -- Heros
+            'monster': [50],  # Unit feature -- Monsters
+            'turret': [50],  # Unit feature -- Turrets
+            'minion': [50],  # Unit feature -- Minions
             'stat': [50], # In-game stats feature
             'spatial': [6, 17, 17], # Spatial feature
             'invisible': [50], # Invisible opponent information

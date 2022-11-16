@@ -19,6 +19,7 @@ class MCCAN:
         self.meta_cmd_size = meta_cmd_size
 
         self.player_num = Config.player_num
+        self.hero_dim = MCCAN_config.hero_dim
         self.unit_dim = MCCAN_config.unit_dim
         self.stat_dim = MCCAN_config.stat_dim
         self.invisible_dim = MCCAN_config.invisible_dim
@@ -37,11 +38,11 @@ class MCCAN:
             spatial_flatten_size = 768
 
             hero_flatten_size = int(np.prod(self.hero_size))
-            self.fc1_hero_weight = _fc_weight_variable(shape=[hero_flatten_size, self.unit_dim], name="fc1_hero_weight", trainable=is_train)
-            self.fc1_hero_bias = _bias_variable(shape=[self.unit_dim], name="fc1_hero_bias", trainable=is_train)
-            self.fc2_hero_weight = _fc_weight_variable(shape=[self.unit_dim, self.unit_dim // 2], name="fc2_hero_weight", trainable=is_train)
-            self.fc2_hero_bias = _bias_variable(shape=[self.unit_dim // 2], name="fc2_hero_bias", trainable=is_train)
-            self.fc3_hero_weight = _fc_weight_variable(shape=[self.unit_dim // 2, self.action_query_dim], name="fc3_hero_weight", trainable=is_train)
+            self.fc1_hero_weight = _fc_weight_variable(shape=[hero_flatten_size, self.hero_dim], name="fc1_hero_weight", trainable=is_train)
+            self.fc1_hero_bias = _bias_variable(shape=[self.hero_dim], name="fc1_hero_bias", trainable=is_train)
+            self.fc2_hero_weight = _fc_weight_variable(shape=[self.hero_dim, self.hero_dim // 2], name="fc2_hero_weight", trainable=is_train)
+            self.fc2_hero_bias = _bias_variable(shape=[self.hero_dim // 2], name="fc2_hero_bias", trainable=is_train)
+            self.fc3_hero_weight = _fc_weight_variable(shape=[self.hero_dim // 2, self.action_query_dim], name="fc3_hero_weight", trainable=is_train)
             self.fc3_hero_bias = _bias_variable(shape=[self.action_query_dim], name="fc3_hero_bias", trainable=is_train)
 
             monster_flatten_size = int(np.prod(self.monster_size))
