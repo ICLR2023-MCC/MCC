@@ -13,9 +13,11 @@ class FakeData:
             'stat': [50], # In-game stats feature
             'spatial': [6, 17, 17], # Spatial feature
             'invisible': [50], # Invisible opponent information
-            'meta_cmd': [1, 12, 12], # Meta-Command feature
+            'meta_cmd': [1, 12, 12], # Meta-Command feature -- L
+            'meta_cmd_E': [103],  # Meta-Command feature -- E, for auxiliary training
 
             'CEN_label': [144], # CEN label -- real Meta-Command (one-hot)
+            'CEN_aux_label': [103],  # CEN auxiliary label -- real Meta-Command (one-hot) -- E, for auxiliary training
 
             'CS_V_label': [5], # CS V label -- real r + gamma * V(S', C) for each value head
             'CS_Q_label': [1], # CS Q label -- real r_total + gamma * Q(S', C', M')

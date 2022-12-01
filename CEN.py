@@ -4,7 +4,7 @@ import numpy as np
 from config import CEN_config
 
 class CEN:
-    def __init__(self, hero_size, monster_size, turret_size, minion_size, stat_size, meta_cmd_size):
+    def __init__(self, hero_size, monster_size, turret_size, minion_size, stat_size, meta_cmd_size, meta_cmd_E_size):
         self.hero_size = hero_size
         self.monster_size = monster_size
         self.turret_size = turret_size
@@ -12,6 +12,7 @@ class CEN:
         self.stat_size = stat_size
 
         self.meta_cmd_size = meta_cmd_size
+        self.meta_cmd_E_size = meta_cmd_E_size
 
         self.hero_dim = CEN_config.hero_dim
         self.unit_dim = CEN_config.unit_dim
@@ -64,6 +65,10 @@ class CEN:
             self.fc1_meta_cmd_bias = _bias_variable(shape=[self.meta_cmd_dim], name="fc1_meta_cmd_bias", trainable=is_train)
             self.fc2_meta_cmd_weight = _fc_weight_variable(shape=[self.meta_cmd_dim, meta_cmd_flatten_size], name="fc2_meta_cmd_weight", trainable=is_train)
             self.fc2_meta_cmd_bias = _bias_variable(shape=[meta_cmd_flatten_size], name="fc2_meta_cmd_bias", trainable=is_train)
+
+            meta_cmd_E_flatten_size = int(np.prod(self.meta_cmd_E_size))
+            self.fc1_meta_cmd_E_weight = _fc_weight_variable(shape=[concat_dim, meta_cmd_E_flatten_size], name="fc1_meta_cmd_E_weight", trainable=is_train)
+            self.fc1_meta_cmd_E_bias = _bias_variable(shape=[meta_cmd_E_flatten_size], name="fc1_meta_cmd_E_bias", trainable=is_train)
 
     def infer(self, hero, monster, turret, minion, stat, top_k):
         with tf.variable_scope('CEN'):
@@ -126,4 +131,9 @@ class CEN:
             topk_softmax_prob = topk_softmax(fc2_meta_cmd_result, top_k)
             meta_cmd = tf.stop_gradient(sample_from_prob(topk_softmax_prob))
 
-            return softmax_prob, meta_cmd
+            ### meta-command E auxiliary training ###
+            fc1_meta_cmd_E_result = tf.nn.relu((tf.matmul(concat_all, self.fc1_meta_cmd_E_weight) + self.fc1_meta_cmd_E_bias),
+                                             name="fc1_meta_cmd_E_result")
+            softmax_E_prob = tf.nn.softmax(fc1_meta_cmd_E_result)
+
+            return softmax_prob, softmax_E_prob, meta_cmd

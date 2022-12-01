@@ -17,14 +17,16 @@ losses = []
 feature_list = ['hero', 'monster', 'turret', 'minion', 'stat']
 hero_size, monster_size, turret_size, minion_size, stat_size = [size_info[k] for k in feature_list]
 cen_net = CEN(hero_size=hero_size, monster_size=monster_size, turret_size=turret_size, minion_size=minion_size,
-              stat_size=stat_size, meta_cmd_size=size_info['meta_cmd'])
+              stat_size=stat_size, meta_cmd_size=size_info['meta_cmd'], meta_cmd_E_size=size_info['meta_cmd_E'])
 cen_net.build(is_train=True)
 for index, player in enumerate(placeholder):
     with tf.variable_scope('player_%d' % index):
         hero, monster, turret, minion, stat = [player[k] for k in feature_list]
         y_label = player['CEN_label']
-        softmax_prob, meta_cmd = cen_net.infer(hero=hero, monster=monster, turret=turret, minion=minion, stat=stat, top_k=CEN_config.softmax_k)
+        y_aux_label = player['CEN_aux_label']
+        softmax_prob, softmax_E_prob, meta_cmd = cen_net.infer(hero=hero, monster=monster, turret=turret, minion=minion, stat=stat, top_k=CEN_config.softmax_k)
         loss = focal_loss(y_label, softmax_prob, alpha=0.75, gamma=2)
+        loss += focal_loss(y_aux_label, softmax_E_prob, alpha=0.75, gamma=2)
         losses.append(loss)
 total_loss = tf.reduce_mean(losses)
 
