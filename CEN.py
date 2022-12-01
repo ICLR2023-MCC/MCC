@@ -132,7 +132,7 @@ class CEN:
             meta_cmd = tf.stop_gradient(sample_from_prob(topk_softmax_prob))
 
             ### meta-command E auxiliary training ###
-            fc1_meta_cmd_E_result = tf.nn.relu((tf.matmul(concat_all, self.fc1_meta_cmd_E_weight) + self.fc1_meta_cmd_E_bias),
+            fc1_meta_cmd_E_result = tf.add(tf.matmul(concat_all, self.fc1_meta_cmd_E_weight), self.fc1_meta_cmd_E_bias,
                                              name="fc1_meta_cmd_E_result")
             softmax_E_prob = tf.nn.softmax(fc1_meta_cmd_E_result)
 
