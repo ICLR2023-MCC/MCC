@@ -26,10 +26,12 @@ class FakeData:
             'MCCAN_V_label': [6],  # MCCAN V label -- real r + gamma * V(S') for each value head (ext + int reward)
             'MCCAN_advantage': [1], # MCCAN advantage -- read r + gamma * V(S') - V, sum of the advantages for all value heads
          }
+
+        # Action space: What(14), Move X(9), Move Y(9), Skill X(9), Skill Y(9), Who(5)
         for index, action_size in enumerate([14, 9, 9, 9, 9, 5]):
             # MCCAN old policy -- real softmax prob
             self.size_dict['MCCAN_old_policy_%d' % index] = [action_size]
-            # MCCAN action label - real selected cmd (one-hot)
+            # MCCAN action label - real selected action (one-hot)
             self.size_dict['MCCAN_action_label_%d' % index] = [action_size]
 
     def get_size(self):
