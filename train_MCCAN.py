@@ -17,12 +17,12 @@ self_cmd_list = []
 feature_list = ['hero', 'monster', 'turret', 'minion', 'stat']
 hero_size, monster_size, turret_size, minion_size, stat_size = [size_info[k] for k in feature_list]
 cen_net = CEN(hero_size=hero_size, monster_size=monster_size, turret_size=turret_size, minion_size=minion_size,
-              stat_size=stat_size, meta_cmd_size=size_info['meta_cmd'])
+              stat_size=stat_size, meta_cmd_size=size_info['meta_cmd'], meta_cmd_E_size=size_info['meta_cmd_E'])
 cen_net.build(is_train=False)
 for index, player in enumerate(placeholder):
     with tf.variable_scope('player_%d' % index):
         hero, monster, turret, minion, stat = [player[k] for k in feature_list]
-        softmax_prob, meta_cmd = cen_net.infer(hero=hero, monster=monster, turret=turret, minion=minion, stat=stat, top_k=CEN_config.softmax_k)
+        softmax_prob, _, meta_cmd = cen_net.infer(hero=hero, monster=monster, turret=turret, minion=minion, stat=stat, top_k=CEN_config.softmax_k)
         self_cmd_list.append(meta_cmd)
 
 ### MCCAN ###
