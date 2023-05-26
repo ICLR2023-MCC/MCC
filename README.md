@@ -1,4 +1,6 @@
 # MCC —— Towards Effective and Interpretable Human-Agent Collaboration in MOBA Games: A Communication Perspective
+## Paper Link
+- https://openreview.net/pdf?id=q3F0UBAruO
 
 ## Environmental Requirements
 - numpy == 1.18.5
